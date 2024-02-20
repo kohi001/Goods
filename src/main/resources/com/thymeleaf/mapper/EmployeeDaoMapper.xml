@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ems_thymeleaf.dao.EmployeeDao">
+    <resultMap id="employeeDepartmentResultMap" type="com.example.ems_thymeleaf.dto.EmployeeDepartmentDto">
+        <result property="emplyee_id" column="emplyee_id" />
+        <result property="employee_name" column="employee_name" />
+        <result property="address" column="address" />
+        <result property="sex" column="sex" />
+        <result property="department_name" column="department_name" />
+    </resultMap>
+    <select id="lists" resultType="Employee">
+        select * from `employee`
+    </select>
+
+    <insert id="save" parameterType="Employee">
+        insert into `employee`(emplyee_id,employee_name,employee_password,sex,address,mail_address,phone_number,department,job_title,employment_status,hire_date,birth_date,insurance_number,annuity_number,position,resume)
+        values (#{emplyee_id},#{employee_name},#{employee_password},#{sex},#{address},#{mail_address},#{phone_number},#{department},#{job_title},#{employment_status},#{hire_date},#{birth_date},#{insurance_number},#{annuity_number},#{position},#{resume})
+    </insert>
+
+    <select id="findById" parameterType="Integer" resultType="Employee">
+        select * from `employee`
+        where emplyee_id = #{emplyee_id}
+    </select>
+
+    <update id="update" parameterType="employee">
+        update `employee` set employee_name = #{employee_name},employee_password = #{employee_password},sex = #{sex},address = #{address},mail_address = #{mail_address},phone_number = #{phone_number},department = #{department},job_title = #{job_title},employment_status = #{employment_status},hire_date = #{hire_date},birth_date = #{birth_date},insurance_number = #{insurance_number},annuity_number = #{annuity_number},position = #{position},resume = #{resume}
+        where emplyee_id = #{emplyee_id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from `employee` where emplyee_id = #{emplyee_id}
+    </delete>
+
+    <select id="search" parameterType="map" resultMap="employeeDepartmentResultMap">
+        select e.emplyee_id,e.employee_name,e.address,e.sex,d.department as department_name
+        from employee e
+        left join department d on e.department = d.id
+        <where>
+            <if test="emplyee_id!=null and emplyee_id!='' ">
+                AND emplyee_id=#{emplyee_id}
+            </if>
+            <if test="employee_name!=null and employee_name!='' ">
+                AND employee_name LIKE concat('%',#{employee_name},'%')
+            </if>
+            <if test="department!=null and department!='' ">
+                AND d.department LIKE concat('%',#{department},'%')
+            </if>
+            <if test="address!=null and address!='' ">
+                AND address LIKE concat('%',#{address},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getEmployeeWithDepartments" resultMap="employeeDepartmentResultMap">
+        select e.emplyee_id,e.employee_name,e.address,e.sex,d.department as department_name
+        from employee e
+        left join department d on e.department = d.id
+    </select>
+    <select id="getAllAttendances"  parameterType="map" resultType="Attendance">
+        select * from `attendance` where emplyee_id=#{emplyee_id} AND YEAR(attendance_date) = YEAR(CURDATE())
+                                     AND MONTH(attendance_date) = MONTH(CURDATE())
+        ORDER BY attendance_date ASC
+    </select>
+    <select id="searchDate" parameterType="map" resultType="Attendance">
+        SELECT * FROM `attendance`
+        <where>
+            <if test="year != null">
+                AND YEAR(attendance_date) = #{year}
+            </if>
+            <if test="month != null">
+                AND MONTH(attendance_date) = #{month}
+            </if>
+            <if test="day != null">
+                AND DAY(attendance_date) = #{day}
+            </if>
+            and emplyee_id =#{emplyee_id}
+        </where>
+        ORDER BY attendance_date ASC
+    </select>
+    <insert id="clock" parameterType="Attendance">
+        insert into `attendance`(emplyee_id,attendance_date,status,start_date,end_date)
+        values (#{emplyee_id},#{attendance_date},#{status},#{start_date},#{end_date})
+    </insert>
+    <update id="updateAttendance" parameterType="Attendance" >
+        update `attendance` set
+                                status=#{status},
+                                start_date=#{start_date},
+                                end_date=#{end_date}
+        where record_id=#{record_id}
+    </update>
+    <select id="hasAttendanceRecords" resultType="boolean" parameterType="map">
+        SELECT COUNT(*) > 0 FROM attendance
+        WHERE emplyee_id = #{emplyee_id}
+            AND YEAR(attendance_date) = #{year}
+          AND MONTH(attendance_date) = #{month}
+    </select>
+    <select id="getAttendancesInRange" resultType="Attendance" parameterType="map">
+        SELECT * FROM attendance
+        WHERE emplyee_id = #{emplyee_id}
+        ORDER BY attendance_date DESC
+            LIMIT #{startRow}, #{endRow}
+    </select>
+
+
+</mapper>

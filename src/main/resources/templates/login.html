@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>login</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css"
+			  th:href="@{/css/style.css}" />
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="top_content">
+					<div id="header">
+						<div id="rightheader">
+							<p>
+								2009/11/20
+								<br />
+							</p>
+						</div>
+						<div id="topheader">
+							<h1 id="title">
+								<a href="#">main</a>
+							</h1>
+						</div>
+						<div id="navigation">
+						</div>
+					</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						ログインしてください
+					</h1>
+					<form th:action="@{/user/login}" method="post" th:object="${user}">
+						<table class="form_table">
+							<span id="successMsg" th:text="${msg}"></span>
+							<script>
+								var messageElement = document.getElementById("successMsg")
+								setTimeout(function (){
+									messageElement.style.display = 'none';
+								},2000)
+							</script>
+							<div th:if="${errorMsg}" class="error">
+								<p th:text="${errorMsg}"></p>
+							</div>
+							<tr>
+								<td>
+									ユーザID:
+								</td>
+								<td>
+									<input type="text" class="inputgri" th:field="*{user_name}" />
+									<span th:if="${#fields.hasErrors('user_name')}" class="error" th:errors="*{user_name}"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									パスワード:
+								</td>
+								<td>
+									<input type="password" class="inputgri" th:field="*{password}" />
+									<span th:if="${#fields.hasErrors('password')}" class="error" th:errors="*{password}"></span>
+								</td>
+							</tr>
+						</table>
+<!--							<input type="submit" class="button" value="ログイン &raquo;" />-->
+
+					</form>
+					<button class="button"  onclick="emplist()">ログイン</button>
+					<button class="button1" onclick="refresh()">新規作成</button>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+					ABC@126.com
+				</div>
+			</div>
+		</div>
+	</body>
+     <script>
+		 function refresh(){
+			 location.href='[[@{/user/registering}]]'
+		 }
+		 function emplist(){
+			 location.href='[[@{/employee/lists}]]'
+		 }
+	 </script>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>attendance</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+  <div id="top_content">
+    <div id="header">
+      <h1 id="title">
+        社員管理システム
+      </h1>
+    </div>
+    <div id="content">
+      <div class="nav">
+        <h1 class="header2">
+          勤怠情報一覧
+        </h1>
+        <a class="button10" th:href="@{/worker/loging}">ログアウト</a >
+      </div>
+
+        <form th:action="@{/worker/search}" method="post" class="form">
+				<span class="msg" id="successMsg1" th:text="${msg1}">
+				</span>
+            <span class="msg" id="successMsg4" th:text="${msg4}"></span>
+            <script  src="https://code.jquery.com/jquery-3.6.4.min.js">
+            </script>
+            <script >
+                jQuery(document).ready(function() {
+                    jQuery(".msg").each(function(index, element) {
+                        setTimeout(function() {
+                            jQuery(element).fadeOut();
+                        }, 300 * (index + 1));
+                    });
+                });
+            </script>
+            <span>
+					社員番号:
+                    <input id="emplyee_id" class="emplyee_id" name="emplyee_id" th:value="${(#httpSession.getAttribute('emplyee_id'))}"/>
+				</span>
+            <span class="employee_name">
+					社員名:
+                    <span th:text="${(#httpSession.getAttribute('employee_name'))}">
+                    </span>
+				</span>
+            <span class="searchBar">       年:
+                <input type="number" id="yearInput" name="year" min="1900" max="2100">
+                月:
+                <input type="number" id="monthInput" name="month" min="1" max="12">
+                日:
+                <input type="number" id="dayInput" name="day" min="1" max="31"></span>
+
+            <button class="button1" type="submit">検索</button>
+        </form>
+        <script>
+            var employeeId = [[${#httpSession.getAttribute('emplyee_id')}]] ;
+            function refresh(){
+                location.href='/ems/worker/attendance?emplyee_id=' + employeeId;
+            }</script>
+        <button class="button3" onclick="refresh()" >リセット</button>
+        <div id="attendanceListContainer" style=" overflow-y: scroll;">
+            <table class="table">
+                <tr class="table_header">
+                    <td class="h1">
+                        日付
+                    </td>
+                    <td class="h2">
+                        区分
+                    </td>
+                    <td class="h3">
+                        出社
+                    </td>
+                    <td class="h4">
+                        退社
+                    </td>
+                    <td class="h5">
+                        操作
+                    </td>
+                </tr>
+                <th:block th:each="attendance:${attendances}">
+                    <form class="form" th:action="@{/worker/update}" >
+                        <tr class="row1">
+                            <input type="hidden" th:value="${attendance.record_id}" th:name="record_id"/>
+                            <td class="r1">
+                                <span class="date" th:text="${#dates.format(attendance.attendance_date,'yyyy-MM-dd')}"></span>
+                            </td>
+                            <td class="r2">
+                                <select th:name="status">
+                                    <option value="" th:selected="${attendance.status == ''}">请选择</option>
+                                    <option value="出勤" th:selected="${attendance.status == '出勤'}">出勤</option>
+                                    <option value="欠勤" th:selected="${attendance.status == '欠勤'}">欠勤</option>
+                                    <option value="有給" th:selected="${attendance.status == '有給'}">有給</option>
+                                    <option value="代休" th:selected="${attendance.status == '代休'}">代休</option>
+                                </select>
+                            </td>
+                            <td class="r3">
+                                <input type="time" th:value="${#temporals.format(attendance.start_date, 'HH:mm')}" th:name="start_date"/>
+                            </td>
+                            <td class="r4">
+                                <input type="time" th:value="${#temporals.format(attendance.end_date, 'HH:mm')}" th:name="end_date"/>
+                            </td>
+                            <td class="r5">
+                                <button class="button12" type="submit">打卡</button>
+                            </td>
+                        </tr>
+                    </form>
+                </th:block>
+            </table>
+        </div>
+    </div>
+  </div>
+    <div id="footer">
+        Namiki@126.com
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"  th:inline="javascript">
+    var loading = false;
+    var pageNum = 2;  // 从第二页开始加载
+    var pageSize = 6;  // 每次加载的数据条数
+    var maxPage = 5/* 根据实际情况计算 */;
+    var container = document.getElementById('attendanceListContainer');
+    container.addEventListener('scroll', function() {
+        // 检查是否滚动到容器底部
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
+            // 避免重复加载数据并判断是否还有更多数据可加载
+            if (!loading && pageNum <= maxPage) {
+                loading = true;
+                // 发送Ajax请求加载更多数据
+                $.ajax({
+                    url: '/worker/loadMoreData',  // 路径根据实际情况调整
+                    type: 'GET',
+                    data: {
+                        pageNum: pageNum,
+                        emplyee_id: /*[[${#httpSession.getAttribute('employee_id')}]]*/ '',
+                        pageSize:pageSize
+                    },
+                    success: function(data) {
+                        // 插入新加载的数据到表格
+                        $('#attendanceList table tbody').append(data);
+
+                        // 标记加载完成
+                        loading = false;
+                        pageNum++;  // 更新页数
+                    }
+                });
+            }
+        }
+    });
+    const forms = document.querySelectorAll('.form');
+    forms.forEach(form => {
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+
+            const formInputs = form.querySelectorAll("input, select");
+            let formData = new FormData();
+            formInputs.forEach(input => {
+                if (input.tagName === 'SELECT') {
+                    const selectedOption = input.options[input.selectedIndex];
+                    formData.append(input.name, selectedOption.value);
+                } else {
+                    formData.append(input.name, input.value);
+                }
+            });
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error.message))
+                .finally(() => console.log("Done"));
+        })
+    });
+
+
+</script>
+
+
+
+
+</html>
