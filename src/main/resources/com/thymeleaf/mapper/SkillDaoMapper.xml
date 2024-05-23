@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ems_thymeleaf.dao.SkillDao">
+    <select id="getSkills"  resultType="Skill">
+        select * from `skill`
+    </select>
+    <update id="update" parameterType="skill">
+        update `skill` set language = #{language},data_base = #{data_base},qualification = #{qualification},framework = #{framework},experience = #{experience},OS = #{OS}
+        where emplyee_id = #{emplyee_id}
+    </update>
+    <select id="findById" parameterType="Integer" resultType="Skill">
+        select * from `skill`
+        where emplyee_id = #{emplyee_id}
+    </select>
+    <insert id="save" parameterType="Skill">
+        insert into `skill`(emplyee_id,language,data_base,qualification,framework,experience,OS)
+        values (#{emplyee_id},#{language},#{data_base},#{qualification},#{framework},#{experience},#{OS})
+    </insert>
+    <delete id="delete" parameterType="Integer">
+        delete from `skill` where emplyee_id = #{emplyee_id}
+    </delete>
+</mapper>

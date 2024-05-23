@@ -36,7 +36,6 @@ mybatis:
     type-aliases-package: com.example.ems_thymeleaf.entity
 
 
-
 logging:
   level:
       root: info
@@ -45,10 +44,6 @@ logging:
 file:
   resume:
     dir: D:\软件\ems_thymeleaf\resume
-
-
-
-
 
 
 

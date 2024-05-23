@@ -1,0 +1,185 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<head>
+    <title>更新商品信息</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/css/style.css}" />
+</head>
+
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="header">
+            <div id="navigation">
+            </div>
+        </div>
+        <div id="content">
+            <p id="whereami">
+            </p>
+            <h1>
+                商品情報の更新:
+            </h1>
+            <form method="post" th:object="${goods}" enctype="multipart/form-data">
+                <table class="form_table">
+                    <tr>
+                        <td class="r1">
+                            商品ID：
+                        </td>
+                        <td>
+                            <span th:text="${goods.goodsId}"></span>
+                            <input type="hidden"  th:field="*{goodsId}"/>
+                        </td>
+                    </tr>
+                    <tr class="r2">
+                        <td>
+                            商品番号:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{goodsCode}" />
+
+                        </td>
+                    </tr>
+                    <tr class="r3">
+                        <td>
+                            サイズ:
+                        </td>
+                        <td>
+                            <select name="size">
+                                <option value="">请选择</option>
+                                <option th:each="s:${sizes}" th:value="${s.sizeId}" th:text="${s.sizeName}"
+                                        th:selected="${s.sizeId==goods.size}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r4">
+                        <td>
+                            色:
+                        </td>
+                        <td>
+                            <select name="color">
+                                <option value="">请选择</option>
+                                <option th:each="gc:${colors}" th:value="${gc.number}" th:text="${gc.goodsColor}"
+                                        th:selected="${gc.number==goods.color}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r5">
+                        <td>
+                            大分類:
+                        </td>
+                        <td>
+                            <select name="bigClassification">
+                                <option value="">请选择</option>
+                                <option th:each="b:${bigclassifications}" th:value="${b.code}" th:text="${b.name}"
+                                        th:selected="${b.code==goods.bigClassification}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r6">
+                        <td>
+                            中分類:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{middleClassification}"/>
+                        </td>
+                    </tr>
+                    <tr class="r7">
+                        <td>
+                            値段:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{price}"/>
+                        </td>
+                    </tr>
+                    <tr class="r8">
+                        <td>
+                            送料:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{expenses}"/>
+                        </td>
+                    </tr>
+                    <tr class="r9">
+                        <td>
+                            説明:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{description}"/>
+                        </td>
+                    </tr>
+                    <tr class="r10">
+                        <td>
+                            キャンペーン:
+                        </td>
+                        <td>
+                            <select name="discount">
+                                <option value="">请选择</option>
+                                <option th:each="gd:${discounts}" th:value="${gd.discountId}" th:text="${gd.discountvalue}"
+                                        th:selected="${gd.discountId==goods.discount}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r11">
+                        <td>
+                            産地:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{producer}"/>
+                        </td>
+                    </tr>
+                    <tr class="r12">
+                        <td>
+                            数量:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{quantity}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            今のファイル：
+                        </td>
+                        <td>
+                            <a th:href="@{/goods/download(file=${goods.file})}" th:download="${goods.file}" th:text="*{goodsId+'ファイル'}"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            新しいファイル:
+                        </td>
+                        <td>
+                            <input type="file" name="fileFile"  accept=".xls,.doc,.docx,.pdf,.png">
+                        </td>
+                    </tr>
+                </table>
+                <button class="button1" type="submit"  formaction="update">更新</button>
+            </form>
+            <button class="button2"   th:onclick="'deleteGoods('+${goods.goodsId}+')'">
+                削除
+            </button>
+            <button class="button3" onclick="refresh()">戻る</button>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="footer_bg">
+            ABC@126.com
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function deleteGoods(goodsId){
+        if (window.confirm('本当にこのレコードを削除しますか？')){
+            location.href = '[[@{/goods/delete?goodsId=}]]'+goodsId;
+        }
+    }
+    function refresh(){
+        location.href='[[@{/goods/lists}]]'
+    }
+</script>
+</html>

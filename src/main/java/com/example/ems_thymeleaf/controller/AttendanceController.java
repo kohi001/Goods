@@ -62,24 +62,24 @@ import java.util.List;
             employeeService.generateDailyAttendance(emplyee_id,year,month);
             String employee_name = employeeService.findById(emplyee_id).getEmployee_name();
             ra.addFlashAttribute("msg4","ログイン成功しました!");
-            session.setAttribute("employee_id",emplyee_id);
+            session.setAttribute("emplyee_id",emplyee_id);
             session.setAttribute("employee_name",employee_name);
-            return "redirect:/worker/attendance?employee_id=" + emplyee_id;
+            return "redirect:/worker/attendance?emplyee_id=" + emplyee_id;
         }
         @RequestMapping("attendance")
-        public String getAttendance(Model model, @RequestParam(defaultValue = "1",value = "pageNum")Integer pageNum,@RequestParam Integer employee_id)
+        public String getAttendance(Model model, @RequestParam(defaultValue = "1",value = "pageNum")Integer pageNum,@RequestParam Integer emplyee_id)
         {
-            List<Attendance> attendances = employeeService.getAllAttendances(employee_id);
+            List<Attendance> attendances = employeeService.getAllAttendances(emplyee_id);
             model.addAttribute("attendances",attendances);
             return "attendance";
         }
         @RequestMapping("/loadMoreData")
         public ResponseEntity<List<Attendance>> loadMoreData(@RequestParam Integer pageNum,
                                                              @RequestParam Integer pageSize,
-                                                             @RequestParam Integer employee_id,
+                                                             @RequestParam Integer emplyee_id,
                                                              Model model) {
             // 根据 pageNum 和 pageSize 查询数据库获取更多数据
-            List<Attendance> moreData = employeeService.getMoreAttendances(employee_id, pageNum, pageSize);
+            List<Attendance> moreData = employeeService.getMoreAttendances(emplyee_id, pageNum, pageSize);
             model.addAttribute("attendances",moreData);
             return new ResponseEntity<>(moreData, HttpStatus.OK);
         }
@@ -89,14 +89,14 @@ import java.util.List;
                 @RequestParam(required = false) Integer year,
                 @RequestParam(required = false) Integer month,
                 @RequestParam(required = false) Integer day,
-                @RequestParam Integer employee_id,
+                @RequestParam Integer emplyee_id,
                 Model model) {
             // 如果年份和月份未提供，则使用当前的年份和月份作为默认值
             if (year == null && month==null) {
                 year = Year.now().getValue(); // 获取当前年份
                 month = LocalDate.now().getMonthValue(); // 获取当前月份
             }
-            List<Attendance>attendances=employeeService.searchDate(year,month,day,employee_id);
+            List<Attendance>attendances=employeeService.searchDate(year,month,day,emplyee_id);
             model.addAttribute("attendances",attendances);
             model.addAttribute("searchYear", year);
             model.addAttribute("searchMonth", month);

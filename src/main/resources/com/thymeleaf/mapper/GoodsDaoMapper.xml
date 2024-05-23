@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ems_thymeleaf.dao.GoodsDao">
+    <resultMap id="goodsBigClassificationResultMap" type="com.example.ems_thymeleaf.dto.GoodsClassificationDto">
+        <result property="goodsId" column="goodsId" />
+        <result property="goodsCode" column="goodsCode" />
+        <result property="size" column="size" />
+        <result property="goodsColor_name" column="goodsColor_name" />
+        <result property="bigClassification_name" column="bigClassification_name" />
+        <result property="middleClassification" column="middleClassification" />
+        <result property="file" column="file" />
+        <result property="price" column="price"/>
+        <result property="expenses" column="expenses"/>
+        <result property="description" column="description"/>
+        <result property="discount_value" column="discount_value"/>
+        <result property="producer" column="producer"/>
+        <result property="quantity" column="quantity"/>
+
+    </resultMap>
+    <select id="search" parameterType="map" resultMap="goodsBigClassificationResultMap">
+        select g.goodsCode,g.middleClassification,g.file,g.price,g.expenses,g.description,g.producer,s.sizeName as size_name,b.name as bigClassification_name,gc.goodsColor as goodsColor_name,gd.discountvalue as  discount_value
+        from goods g
+        left join size s on g.size = s.sizeId
+        left join bigclassification b on g.bigClassification = b.code
+        left join goodscolor gc on g.color = gc.number
+        left join goodsdiscount gd on g.discount = gd.discountId
+        <where>
+            <if test="goodsCode!=null and goodsCode!='' ">
+                AND goodsCode=#{goodsCode}
+            </if>
+            <if test="producer!=null and producer!='' ">
+                AND producer LIKE concat('%',#{producer},'%')
+            </if>
+            <if test="bigClassification!=null and bigClassification!='' ">
+                AND b.name LIKE concat('%',#{bigClassification},'%')
+            </if>
+            <if test="price!=null and price!='' ">
+                AND price LIKE concat('%',#{price},'%')
+            </if>
+            <if test="color != null and color.size() > 0">
+                and gc.number IN
+                <foreach item="color" collection="color" open="(" separator="," close=")">
+                    #{color}
+                </foreach>
+            </if>
+            <if test="size != null and size.size() > 0">
+                and s.sizeId IN
+                <foreach item="size" collection="size" open="(" separator="," close=")">
+                    #{size}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getGoodWithClassifications" resultMap="goodsBigClassificationResultMap">
+        select g.goodsId,g.goodsCode,g.middleClassification,g.file,g.price,g.expenses,g.description,g.producer,s.sizeName as size_name,b.name as bigClassification_name,gc.goodsColor as goodsColor_name,gd.discountvalue as  discount_value
+        from goods g
+                 left join size s on g.size = s.sizeId
+                 left join bigclassification b on g.bigClassification = b.code
+                 left join goodscolor gc on g.color = gc.number
+                 left join goodsdiscount gd on g.discount = gd.discountId
+    </select>
+    <select id="findById" parameterType="Integer" resultType="Goods">
+        select * from `goods`
+        where goodsId = #{goodsId}
+    </select>
+    <update id="update" parameterType="Goods">
+        update `goods` set goodsCode = #{goodsCode},size = #{size},color = #{color},bigClassification = #{bigClassification},middleClassification = #{middleClassification},file = #{file},price = #{price},expenses = #{expenses},description = #{description},discount = #{discount},producer = #{producer}
+        where goodsId = #{goodsId}
+    </update>
+    <insert id="save" parameterType="Goods">
+        insert into `goods`(goodsId,goodsCode,size,color,bigClassification,middleClassification,file,price,expenses,description,discount,producer)
+        values (#{goodsId},#{goodsCode},#{size},#{color},#{bigClassification},#{middleClassification},#{file},#{price},#{expenses},#{description},#{discount},#{producer})
+    </insert>
+    <delete id="delete" parameterType="Integer">
+        delete from `goods` where goodsId = #{goodsId}
+    </delete>
+    <select id="findByCodeSizeAndColor" parameterType="map" resultType="Goods">
+        select * from `goods`
+        where goodsCode = #{goodsCode}
+          and size = #{size}
+          and color = #{color}
+    </select>
+</mapper>

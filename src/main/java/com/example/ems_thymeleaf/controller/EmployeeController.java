@@ -4,8 +4,11 @@ import com.example.ems_thymeleaf.dto.EmployeeDepartmentDto;
 import com.example.ems_thymeleaf.entity.Employee;
 import com.example.ems_thymeleaf.service.EmployeeService;
 
+import com.example.ems_thymeleaf.service.PdfService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
+import com.github.pagehelper.util.StringUtil;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,10 +28,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,10 +44,15 @@ public class EmployeeController {
 
 
     private EmployeeService employeeService;
+    private PdfService pdfService;
+
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService,PdfService pdfService) {
         this.employeeService = employeeService;
+        this.pdfService = pdfService;
+
+
     }
     @RequestMapping("search")
     public String search(@Param("emplyee_id") Integer emplyee_id,
@@ -140,11 +143,13 @@ public class EmployeeController {
         String originalFilename = resumeFile.getOriginalFilename();
         log.debug("文件名称：{}",originalFilename);
         log.debug("文件大小：{}",resumeFile.getSize());
-        String fileNamePrefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-        String fileNameSuffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String newFileName = fileNamePrefix+fileNameSuffix;
-        resumeFile.transferTo(new File(realpath,newFileName));
-        employee.setResume(newFileName);
+        if (!StringUtil.isEmpty(originalFilename)){
+            String fileNamePrefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            String fileNameSuffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String newFileName = fileNamePrefix+fileNameSuffix;
+            resumeFile.transferTo(new File(realpath,newFileName));
+            employee.setResume(newFileName);
+        }
         if (bindingResult.hasErrors()){
             return "addEmp";
         } else if (employeeService.isEmployeeValid(employee.getEmplyee_id())) {
@@ -171,4 +176,12 @@ public class EmployeeController {
         model.addAttribute("pageInfo",pageInfo);
         return "emplist";
     }
+
+    @PostMapping("/exportPdf")
+    public void exportPdf(HttpServletResponse response,Employee employee) {
+        pdfService.exportPdf(response,employee);
+    }
+
+
+
 }

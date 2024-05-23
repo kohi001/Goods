@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>goodslist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="content">
+            <div class="nav">
+                <h1 class="header">
+                    商品注文
+                </h1>
+            </div>
+            <form th:action="@{/goods/search}" method="post" class="form">
+                <span class="msg" id="successMsg1" th:text="${msg1}"></span>
+                <span class="msg" id="successMsg2" th:text="${msg2}"></span>
+                <span class="msg" id="successMsg3" th:text="${msg3}"></span>
+                <span class="msg" id="successMsg4" th:text="${msg4}"></span>
+                <span class="msg" id="successMsg5" th:text="${msg}"></span>
+                <div class="form-row">
+                    <label class="label">商品番号：</label>
+                    <input type="text" name="goodsCode">
+                    <label class="label3">大分類：</label>
+                    <input type="text" name="bigClassification">
+                    <label>色：</label>
+                    <input type="checkbox" name="color" value="1">黄
+                    <input type="checkbox" name="color" value="2">赤
+                    <input type="checkbox" name="color" value="3">藍
+                    <input type="checkbox" name="color" value="4">緑
+                    <input type="checkbox" name="color" value="5">ピンク
+                </div>
+                <div class="form-row">
+                    <label class="label2">産地：</label>
+                    <input type="text" name="producer">
+                    <label class="label">値段：</label>
+                    <input type="text" name="price">
+                    <label>サイズ：</label>
+                    <input type="checkbox" name="size" value="1">S
+                    <input type="checkbox" name="size" value="2">M
+                    <input type="checkbox" name="size" value="3">L
+                    <input type="checkbox" name="size" value="4">XL
+                </div>
+                <button class="button1" type="submit">検索</button>
+                <button class="button3" type="button" onclick="refresh()">リセット</button>
+            </form>
+
+            <table class="table">
+                <tr class="table_header">
+                    <td class="h1">
+                        商品番号
+                    </td>
+                    <td class="h2">
+                        サイズ
+                    </td>
+                    <td class="h3">
+                        色
+                    </td>
+                    <td class="h4">
+                        大分類
+                    </td>
+                    <td class="h5">
+                        中分類
+                    </td>
+                    <td class="h6">
+                        ファイル
+                    </td>
+                    <td class="h7">
+                        値段
+                    </td>
+                    <td class="h8">
+                        送料
+                    </td>
+                    <td class="h9">
+                        説明
+                    </td>
+                    <td class="h10">
+                        キャンペーン
+                    </td>
+                    <td class="h11">
+                        産地
+                    </td>
+                    <td class="h12">
+                        数量
+                    </td>
+                    <td class="h13">
+                        注文
+                    </td>
+                </tr>
+                <tr th:each="goods,rowStat:${pageInfo.list}" class="row1">
+                    <td class="r1">
+                        <span th:text="${goods.goodsCode}"></span>
+                    </td>
+                    <td class="r2">
+                        <span th:text="${goods.size_name}"></span>
+                    </td>
+                    <td class="r3">
+                        <span th:text="${goods.goodsColor_name}"></span>
+                    </td>
+                    <td class="r4">
+                        <span th:text="${goods.bigClassification_name}"></span>
+                    </td>
+                    <td class="r5">
+                        <span th:text="${goods.middleClassification}"></span>
+                    </td>
+                    <td class="r6">
+                        <span th:text="${goods.file}"></span>
+                    </td>
+                    <td class="r7">
+                        <span th:text="${goods.price}"></span>
+                    </td>
+                    <td class="r8">
+                        <span th:text="${goods.expenses}"></span>
+                    </td>
+                    <td class="r9">
+                        <span th:text="${goods.description}"></span>
+                    </td>
+                    <td class="r10">
+                        <span th:text="${goods.discount_value}"></span>
+                    </td>
+                    <td class="r11">
+                        <span th:text="${goods.producer}"></span>
+                    </td>
+                    <td class="r12">
+                        <span th:text="${goods.quantity}"></span>
+                    </td>
+                    <td class="r13">
+                        <a class="button11" th:href="@{/goods/ordering(goodsId=${goods.goodsId})}">注文</a>
+                    </td>
+                </tr>
+            </table>
+            <p class="number">	1～6件/<span th:text="${pageInfo.total}"></span> 件</p>
+            <ul class="pagination">
+                <li class="top-page">
+                    <a class="button4" th:href="@{/goods/search(goodsCode=${goodsCode},color=${color},bigClassification=${bigClassification},price=${price})}">最初のページ</a>
+                </li>
+                <li class="prev">
+                    <a class="button5" th:href="@{/goods/search(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1,goodsCode=${goodsCode},color=${color},bigClassification=${bigClassification},price=${price})}">前へ</a>
+                </li>
+                <li th:each="nav:${pageInfo.navigatepageNums}">
+                    <a class="button6" th:href="@{/goods/search(pageNum=${nav})}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>
+                    <span class="button7" th:if="${nav == pageInfo.pageNum}" th:text="${nav}" ></span>
+                </li>
+                <li class="next">
+                    <a class="button8" th:href="@{/goods/search(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages},goodsCode=${goodsCode},color=${color},bigClassification=${bigClassification},price=${price})}">次へ</a>
+                </li>
+                <li class="last-page">
+                    <a class="button9" th:href="@{/goods/search(pageNum=${pageInfo.pages},goodsCode=${goodsCode},color=${color},bigClassification=${bigClassification},price=${price})}">最後のページ</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="footer">
+        Namiki@126.com
+    </div>
+</div>
+</body>
+<script>
+    function refresh(){
+        location.href='[[@{/goods/lists}]]';
+    }
+
+</script>
+</html>

@@ -17,9 +17,19 @@ public class Mvcconfig  implements WebMvcConfigurer {
         registry.addViewController("addEmp").setViewName("addEmp");
 
         registry.addViewController("update").setViewName("updateEmp");
-
-
-
-
+        registry.addViewController("mail").setViewName("mail");
+        registry.addViewController("employeelogin").setViewName("employeelogin");
+        registry.addViewController("attendance").setViewName("attendance");
+        registry.addViewController("skilist").setViewName("skilist");
+        registry.addViewController("skilogin").setViewName("skilogin");
+        registry.addViewController("skiupdate").setViewName("skiupdate");
+        registry.addViewController("skiadd").setViewName("skiadd");
+        registry.addViewController("goodsadd").setViewName("goodsadd");
+        registry.addViewController("goodslist").setViewName("goodslist");
+        registry.addViewController("goodslogin").setViewName("goodslogin");
+        registry.addViewController("goodsupdate").setViewName("goodsupdate");
+        registry.addViewController("goodsorderlist").setViewName("goodsorderlist");
+        registry.addViewController("goodsordered").setViewName("goodsordered");
+        registry.addViewController("goodsorder").setViewName("goodsordered");
     }
 }

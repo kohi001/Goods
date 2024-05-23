@@ -1,6 +1,6 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
+<!DOCTYPE html>
+<head>
 		<title>更新员工信息</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css"
@@ -31,7 +31,7 @@
 					<h1>
 						社員情報の更新:
 					</h1>
-					<form th:action="@{/employee/update}" method="post" th:object="${employee}" enctype="multipart/form-data">
+					<form method="post" th:object="${employee}" enctype="multipart/form-data">
 						<table class="form_table">
 							<tr>
 								<td>
@@ -48,6 +48,15 @@
 								</td>
 								<td>
 									<input type="text" class="inputgri"   th:field="*{employee_name}"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									パスワード:
+								</td>
+								<td>
+									<input type="text" class="inputgri" th:field="*{employee_password}" />
+
 								</td>
 							</tr>
 							<tr>
@@ -88,6 +97,22 @@
 								</td>
 								<td>
 									<input type="text" class="inputgri"  th:field="*{address}" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									メールアドレス:
+								</td>
+								<td>
+									<input type="text" class="inputgri" th:field="*{mail_address}"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									携帯電話:
+								</td>
+								<td>
+									<input type="text" class="inputgri" th:field="*{phone_number}"/>
 								</td>
 							</tr>
 							<tr>
@@ -163,9 +188,10 @@
 								</td>
 							</tr>
 						</table>
-						<button class="button1" type="submit">更新</button>
+						<button class="button1" type="submit"  formaction="update">更新</button>
+						<button class="button4" type="submit" formaction="exportPdf">打印</button>
 					</form>
-					<button class="button2" href="javascript:;" th:onclick="'deleteEmployee('+${employee.emplyee_id}+')'">
+					<button class="button2" href="javascript:;"  th:onclick="'deleteEmployee('+${employee.emplyee_id}+')'">
 						削除
 					</button>
 					<button class="button3" onclick="refresh()">戻る</button>

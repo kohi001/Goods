@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社員スキル登録</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+
+</head>
+
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="header">
+            <div id="rightheader">
+            </div>
+            <div id="topheader">
+                <h1 id="title">
+                    <a href="#">社員管理システム</a>
+                </h1>
+            </div>
+        </div>
+        <div id="content">
+            <p id="whereami">
+            </p>
+            <h1>
+                社員スキル登録:
+            </h1>
+
+            <form th:action="@{/skill/update}" method="post" enctype="multipart/form-data" th:object="${skill}">
+                <table class="form_table">
+                    <tr>
+                        <td>
+                            社員番号：
+                        </td>
+                        <td>
+                            <span th:text="${skill.emplyee_id}"></span>
+                            <input type="hidden" name="employee_id" th:field="*{emplyee_id}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            開発言語：
+                        </td>
+                        <td>
+                            <input type="checkbox" th:field="*{language}" value="Java" id="javaCheckbox">
+                            <label for="javaCheckbox">Java</label>
+                            <input type="checkbox" th:field="*{language}" value="C" id="cCheckbox">
+                            <label for="cCheckbox">C</label>
+                            <input type="checkbox" th:field="*{language}" value="PHP" id="phpCheckbox">
+                            <label for="phpCheckbox">PHP</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            データベース：
+                        </td>
+                        <td>
+                            <input type="checkbox" th:field="*{data_base}" value="MySQL" id="mysqlCheckbox">
+                            <label for="mysqlCheckbox">MySQL</label>
+                            <input type="checkbox" th:field="*{data_base}" value="PostgreSQL" id="postgresqlCheckbox">
+                            <label for="postgresqlCheckbox">PostgreSQL</label>
+                            <input type="checkbox" th:field="*{data_base}" value="Oracle" id="oracleCheckbox">
+                            <label for="oracleCheckbox">Oracle</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            資格：
+                        </td>
+                        <td>
+                            <input type="checkbox" th:field="*{qualification}" value="基本情報" id="khCheckbox">
+                            <label for="khCheckbox">基本情報</label>
+                            <input type="checkbox" th:field="*{qualification}" value="応用情報処理" id="oyCheckbox">
+                            <label for="oyCheckbox">応用情報処理</label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            フレームワーク：
+                        </td>
+                        <td>
+                            <input type="checkbox" th:field="*{framework}" value="SpringBoot" id="springbootCheckbox">
+                            <label for="springbootCheckbox">SpringBoot</label>,
+                            <input type="checkbox" th:field="*{framework}" value="Sense" id="senseCheckbox">
+                            <label for="senseCheckbox">Sense</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            開発経験：
+                        </td>
+                        <td>
+                            <select th:field="*{experience}" id="option">
+                                <option value="1年">1年</option>
+                                <option value="2年">2年</option>
+                                <option value="3年">3年</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            OS：
+                        </td>
+                        <td>
+                            <input type="checkbox" th:field="*{OS}" value="Windows10" id="windowsCheckbox">
+                            <label for="windowsCheckbox">Windows10</label>
+                            <input type="checkbox" th:field="*{OS}" value="Linux" id="linuxCheckbox">
+                            <label for="linuxCheckbox">Linux</label>
+                            <input type="checkbox" th:field="*{OS}" value="UNIX" id="unixCheckbox">
+                            <label for="unixCheckbox">UNIX</label>
+                        </td>
+                    </tr>
+                </table>
+                <button class="button2" type="submit" >更新</button>
+            </form>
+            <button class="button1"   th:onclick="'deleteSkill('+${skill.emplyee_id}+')'">
+                削除
+            </button>
+            <button class="button" onclick="refresh()">戻る</button>
+        </div>
+        <div id="footer">
+            <div id="footer_bg">
+                CC@126.com
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function deleteSkill(emplyee_id){
+        if (window.confirm('本当にこのレコードを削除しますか？')){
+            location.href = '[[@{/skill/delete?emplyee_id=}]]'+emplyee_id;
+        }
+    }
+
+    function refresh(){
+        location.href='[[@{/skill/lists}]]';
+    }
+</script>
+</html>

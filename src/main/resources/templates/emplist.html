@@ -3,7 +3,7 @@
 <head>
 	<title>emplist</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/emplist.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 </head>
 <body>
 <div id="wrap">
@@ -117,7 +117,7 @@
 					</td>
 				</tr>
 			</table>
-			<p class="number">	1～8件/<span th:text="${pageInfo.total}"></span> 件</p>
+			<p class="number">	1～6件/<span th:text="${pageInfo.total}"></span> 件</p>
 			<ul class="pagination">
 				<li class="top-page">
 					<a class="button4" th:href="@{/employee/search(emplyee_id=${emplyee_id},employee_name=${employee_name},department=${department},address=${address})}">最初のページ</a>
@@ -184,7 +184,7 @@
 		if (selectedEmails.length >= 1) {
 			// 只选择了一个员工，继续处理发送邮件逻辑
 			var emailAddresses = selectedEmails.join(','); // 将选中的邮件地址连接成一个字符串
-			window.location.href = '/ems/mail/?to=' + emailAddresses+'&subject=' + emailSubject; // 修改为你的邮件编辑页面的URL
+			window.location.href = '/ems-thymeleaf/mail/?to=' + emailAddresses+'&subject=' + emailSubject; // 修改为你的邮件编辑页面的URL
 		}
 	}
 	function toggleCheckbox() {

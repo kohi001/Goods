@@ -55,10 +55,11 @@
             <button class="button1" type="submit">検索</button>
         </form>
         <script>
-            var employeeId = [[${#httpSession.getAttribute('emplyee_id')}]] ;
+            var emplyeeId = [[${#httpSession.getAttribute('emplyee_id')}]] ;
             function refresh(){
-                location.href='/ems/worker/attendance?emplyee_id=' + employeeId;
-            }</script>
+                location.href='/ems/worker/attendance?emplyee_id=' + emplyeeId;
+            }
+        </script>
         <button class="button3" onclick="refresh()" >リセット</button>
         <div id="attendanceListContainer" style=" overflow-y: scroll;">
             <table class="table">
@@ -134,7 +135,7 @@
                     type: 'GET',
                     data: {
                         pageNum: pageNum,
-                        emplyee_id: /*[[${#httpSession.getAttribute('employee_id')}]]*/ '',
+                        emplyee_id: /*[[${#httpSession.getAttribute('emplyee_id')}]]*/ '',
                         pageSize:pageSize
                     },
                     success: function(data) {

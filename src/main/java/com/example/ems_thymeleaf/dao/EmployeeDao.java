@@ -17,7 +17,7 @@ public interface EmployeeDao {
 
     void update(Employee employee);
 
-    void delete(Integer emplyee_Id);
+    void delete(Integer emplyee_id);
 
     List<EmployeeDepartmentDto> search(@Param("emplyee_id") Integer emplyee_id,
                           @Param("employee_name") String employee_name,
@@ -27,15 +27,22 @@ public interface EmployeeDao {
 
     List<EmployeeDepartmentDto> getEmployeeWithDepartments();
 
-    List<Attendance> getAllAttendances(Integer emplyeeId);
+    List<Attendance> getAllAttendances(Integer emplyee_id);
 
-    boolean hasAttendanceRecords(Integer emplyeeId, int year, int month);
+    boolean hasAttendanceRecords(@Param("emplyee_id") Integer emplyee_id,
+                                 @Param("year") int year,
+                                 @Param("month") int month);
+
 
     void clock(Attendance attendance);
 
-    List<Attendance> getAttendancesInRange(Integer emplyeeId, int startRow, int endRow);
+    List<Attendance> getAttendancesInRange(Integer emplyee_id, int startRow, int endRow);
 
-    List<Attendance> searchDate(Integer year, Integer month, Integer day, Integer emplyeeId);
+    List<Attendance> searchDate(
+            @Param("year") Integer year,
+            @Param("month") Integer month,
+            @Param("day") Integer day,
+            @Param("emplyee_id")Integer emplyee_id);
 
     void updateAttendance(Attendance attendance);
 }

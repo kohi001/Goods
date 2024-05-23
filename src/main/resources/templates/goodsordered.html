@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>goodslist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="content">
+            <div class="nav">
+                <h1 class="header">
+                    已注文商品
+                </h1>
+            </div>
+
+            <table class="table">
+                <tr class="table_header">
+                    <td class="h1">
+                        注文ID
+                    </td>
+                    <td class="h2">
+                        商品ID
+                    </td>
+                    <td class="h3">
+                        注文者
+                    </td>
+                    <td class="h4">
+                        注文日付
+                    </td>
+                    <td class="h5">
+                        注文数量
+                    </td>
+                    <td class="h6">
+                        注文金额
+                    </td>
+                </tr>
+                <tr th:each="goods,rowStat:${pageInfo.list}" class="row1">
+                    <td class="r1">
+                        <span th:text="${goodsorder.orderId}"></span>
+                    </td>
+                    <td class="r2">
+                        <span th:text="${goodsorder.goodsId}"></span>
+                    </td>
+                    <td class="r3">
+                        <span th:text="${goodsorder.orderPerson}"></span>
+                    </td>
+                    <td class="r4">
+                        <span th:text="${goodsorder.orderDate}"></span>
+                    </td>
+                    <td class="r5">
+                        <span th:text="${goodsorder.orderNumber}"></span>
+                    </td>
+                    <td class="r6">
+                        <span th:text="${goodsorder.orderMoney}"></span>
+                    </td>
+                </tr>
+            </table>
+            <p class="number">	1～6件/<span th:text="${pageInfo.total}"></span> 件</p>
+            <ul class="pagination">
+                <li class="top-page">
+                    <a class="button4" th:href="@{/goods/ordered(orderId=${orderId})}">最初のページ</a>
+                </li>
+                <li class="prev">
+                    <a class="button5" th:href="@{/goods/ordered(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1,orderId=${orderId})}">前へ</a>
+                </li>
+                <li th:each="nav:${pageInfo.navigatepageNums}">
+                    <a class="button6" th:href="@{/goods/ordered(pageNum=${nav})}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>
+                    <span class="button7" th:if="${nav == pageInfo.pageNum}" th:text="${nav}" ></span>
+                </li>
+                <li class="next">
+                    <a class="button8" th:href="@{/goods/ordered(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages},orderId=${orderId})}">次へ</a>
+                </li>
+                <li class="last-page">
+                    <a class="button9" th:href="@{/goods/ordered(pageNum=${pageInfo.pages},orderId=${orderId})}">最後のページ</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+          <div id="footer">
+             Namiki@126.com
+          </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    function refresh(){
+        location.href='[[@{/goods/lists}]]';
+    }
+
+</script>
+</html>

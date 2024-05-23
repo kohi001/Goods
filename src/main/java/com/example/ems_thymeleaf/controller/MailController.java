@@ -36,13 +36,13 @@ public class MailController {
         mail.setText("您好，xxxx");
         mail.setFrom(emailService.getMailSendFrom());
         model.addAttribute("mail",mail);
-        return "email";
+        return "mail";
     }
 
     @RequestMapping("send")
     public String sendMail(@ModelAttribute("mail") @Valid Mail mail, BindingResult bindingResult, RedirectAttributes rd, Model model, HttpSession httpSession) {
         if (bindingResult.hasErrors()) {
-            return "email";
+            return "mail";
         }
         emailService.sendMail(mail);
         rd.addFlashAttribute("msg","邮件发送成功");

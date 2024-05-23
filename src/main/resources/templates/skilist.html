@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>emplist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="content">
+            <div class="nav">
+                <h1 class="header2">
+                    社員スキル
+                </h1>
+            </div>
+            <form th:action="@{/skill/lists}" method="post" class="form" th:object="${skill}" enctype="multipart/form-data">
+                <button class="button2" type="button" onclick="addEmp()">新規登録</button>
+            </form>
+
+            <table class="table">
+                <tr class="table_header">
+                    <td class="h1">
+                        社員番号
+                    </td>
+                    <td class="h2">
+                        開発言語
+                    </td>
+                    <td class="h3">
+                        データベース
+                    </td>
+                    <td class="h4">
+                        資格
+                    </td>
+                    <td class="h5">
+                        フレームワーク
+                    </td>
+                    <td class="h6">
+                        開発経験
+                    </td>
+                    <td class="h7">
+                        OS
+                    </td>
+
+                </tr>
+                <tr th:each="skill,rowStat:${pageInfo.list}" class="row1">
+                    <td class="r1">
+                        <span th:text="${skill.emplyee_id}"></span>
+                    </td>
+                    <td class="r2">
+                        <span th:text="${skill.language}"></span>
+                    </td>
+                    <td class="r3">
+                        <span th:text="${skill.data_base}"></span>
+                    </td>
+                    <td class="r4">
+                        <span th:text="${skill.qualification}"></span>
+                    </td>
+                    <td class="r5">
+                        <span th:text="${skill.framework}"></span>
+                    </td>
+                    <td class="r6">
+                        <span th:text="${skill.experience}"></span>
+                    </td>
+                    <td class="r7">
+                        <span th:text="${skill.OS}"></span>
+                    </td>
+                    <td class="r8">
+                        <a class="button11" th:href="@{/skill/detail(emplyee_id=${skill.emplyee_id})}">更新</a>
+                    </td>
+                </tr>
+            </table>
+            <p class="number">	1～6件/<span th:text="${pageInfo.total}"></span> 件</p>
+            <ul class="pagination">
+                <li class="top-page">
+                    <a class="button4" th:href="@{/skill/lists(emplyee_id=${emplyee_id})}">最初のページ</a>
+                </li>
+                <li class="prev">
+                    <a class="button5" th:href="@{/skill/lists(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1,emplyee_id=${emplyee_id})}">前へ</a>
+                </li>
+                <li th:each="nav:${pageInfo.navigatepageNums}">
+                    <a class="button6" th:href="@{/skill/lists(pageNum=${nav})}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>
+                    <span class="button7" th:if="${nav == pageInfo.pageNum}" th:text="${nav}" ></span>
+                </li>
+                <li class="next">
+                    <a class="button8" th:href="@{/skill/lists(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages},emplyee_id=${emplyee_id})}">次へ</a>
+                </li>
+                <li class="last-page">
+                    <a class="button9" th:href="@{/skill/lists(pageNum=${pageInfo.pages},emplyee_id=${emplyee_id})}">最後のページ</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="footer">
+        Namiki@126.com
+    </div>
+</div>
+</body>
+<script>
+    function addEmp(){
+        location.href='[[@{/skill/add}]]';
+    }
+</script>
+</html>

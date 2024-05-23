@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>添加商品信息</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+        <div id="content">
+            <h1 class="header2">
+                新規登録
+            </h1>
+            <form th:action="@{/goods/save}" method="post" th:object="${goods}" enctype="multipart/form-data" >
+                <table class="form_table">
+                    <div th:if="${errorMsg}" class="error" th:text="${errorMsg}" >
+
+                    </div>
+                    <div class="error1" th:if="${#fields.hasErrors('goodsId')}" th:errors="*{goodsId}">
+                    </div>
+                    <tr class="r1">
+                        <td>
+                            商品ID:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{goodsId}" />
+
+                        </td>
+                    </tr>
+                    <tr class="r2">
+                        <td>
+                            商品番号:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{goodsCode}" />
+
+                        </td>
+                    </tr>
+                    <tr class="r3">
+                        <td>
+                            サイズ:
+                        </td>
+                        <td>
+                            <select name="size">
+                                <option value="">请选择</option>
+                                <option th:each="s:${sizes}" th:value="${s.sizeId}" th:text="${s.sizeName}"
+                                        th:selected="${s.sizeId==goods.size}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r4">
+                        <td>
+                            色:
+                        </td>
+                        <td>
+                            <select name="color">
+                                <option value="">请选择</option>
+                                <option th:each="gc:${colors}" th:value="${gc.number}" th:text="${gc.goodsColor}"
+                                        th:selected="${gc.number==goods.color}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r5">
+                        <td>
+                            大分類:
+                        </td>
+                        <td>
+                            <select name="bigClassification">
+                                <option value="">请选择</option>
+                                <option th:each="b:${bigclassifications}" th:value="${b.code}" th:text="${b.name}"
+                                        th:selected="${b.code==goods.bigClassification}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r6">
+                        <td>
+                            中分類:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{middleClassification}"/>
+                        </td>
+                    </tr>
+                    <tr class="r7">
+                        <td class="resume">
+                            ファイル：
+                        </td>
+                        <td>
+                            <input type="file"  name="fileFile" class="fileFile" accept=".xls,.doc,.docx,.pdf,.png"/>
+                        </td>
+                    </tr>
+                    <tr class="r8">
+                        <td>
+                            値段:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{price}"/>
+                        </td>
+                    </tr>
+                    <tr class="r9">
+                        <td>
+                            送料:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{expenses}"/>
+                        </td>
+                    </tr>
+                    <tr class="r10">
+                        <td>
+                            説明:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{description}"/>
+                        </td>
+                    </tr>
+                    <tr class="r11">
+                        <td>
+                            キャンペーン:
+                        </td>
+                        <td>
+                            <select name="discount">
+                                <option value="">请选择</option>
+                                <option th:each="gd:${discuonts}" th:value="${gd.discountId}" th:text="${gd.discountvalue}"
+                                        th:selected="${gd.discountId==goods.discount}"
+                                ></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="r12">
+                        <td>
+                            産地:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{producer}"/>
+                        </td>
+                    </tr>
+                    <tr class="r13">
+                        <td>
+                            数量:
+                        </td>
+                        <td>
+                            <input type="text" class="inputgri" th:field="*{quantity}"/>
+                        </td>
+                    </tr>
+                </table>
+                <button class="button2" type="submit" >登録</button>
+            </form>
+            <button class="button" onclick="refresh()">戻る</button>
+        </div>
+    </div>
+    <div id="footer">
+        Namiki@163.com
+    </div>
+</div>
+</body>
+<script>
+    function refresh(){
+        location.href='[[@{/goods/lists}]]';
+    }
+
+</script>
+</html>

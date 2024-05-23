@@ -6,16 +6,18 @@ public class EmployeeDepartmentDto {
     String department_name;
     String address;
     String sex;
+    String mail;
 
     public EmployeeDepartmentDto() {
     }
 
-    public EmployeeDepartmentDto(Integer emplyee_id, String employee_name, String department_name, String address, String sex) {
+    public EmployeeDepartmentDto(Integer emplyee_id, String employee_name, String department_name, String address, String sex, String mail) {
         this.emplyee_id = emplyee_id;
         this.employee_name = employee_name;
         this.department_name = department_name;
         this.address = address;
         this.sex = sex;
+        this.mail = mail;
     }
 
     public Integer getEmplyee_id() {
@@ -56,5 +58,13 @@ public class EmployeeDepartmentDto {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }

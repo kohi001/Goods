@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>商品信息</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/css/style.css}" />
+</head>
+<body>
+<div id="wrap">
+    <div id="content">
+        <h1 class="header2">
+            注文商品信息
+        </h1>
+        <form th:action="@{/goods/order}" method="post" th:object="${goodsorder}" enctype="multipart/form-data" >
+            <table class="form_table">
+                <tr class="r1">
+                    <td>
+                        注文ID:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:field="*{orderId}" />
+
+                    </td>
+                </tr>
+                <tr class="r2">
+                    <td>
+                        注文者:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:field="*{orderPerson}" />
+
+                    </td>
+                </tr>
+                <tr class="r3">
+                    <td>
+                        注文日付:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:field="*{orderDate}" />
+
+                    </td>
+                </tr>
+                <tr class="r4">
+                    <td>
+                        注文数量:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:field="*{orderNumber}" />
+
+                    </td>
+                </tr>
+                <tr class="r5">
+                    <td>
+                        注文金额:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:field="*{orderMoney}" />
+
+                    </td>
+                </tr>
+                <tr class="r6">
+                    <td>
+                        商品ID:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${goodsId}" readonly />
+                    </td>
+                </tr>
+                <tr class="r7">
+                    <td>
+                        商品番号:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${goodsCode}" readonly />
+                    </td>
+                </tr>
+                <tr class="r8">
+                    <td>
+                        サイズ:
+                    </td>
+                    <td>
+                        <input name="size">
+                            <option th:each="s:${sizes}" th:value="${s.sizeId}" th:text="${s.sizeName}"
+                                    th:selected="${s.sizeId==goods.size}"
+                            ></option>
+                        </input>
+                    </td>
+                </tr>
+                <tr class="r9">
+                    <td>
+                        色:
+                    </td>
+                    <td>
+                        <input name="color">
+                            <option th:each="gc:${colors}" th:value="${gc.number}" th:text="${gc.goodsColor}"
+                                    th:selected="${gc.number==goods.color}"
+                            ></option>
+                        </input>
+                    </td>
+                </tr>
+                <tr class="r10">
+                    <td>
+                        大分類:
+                    </td>
+                    <td>
+                        <input name="bigClassification">
+                            <option th:each="b:${bigclassifications}" th:value="${b.code}" th:text="${b.name}"
+                                    th:selected="${b.code==goods.bigClassification}"
+                            ></option>
+                        </input>
+                    </td>
+                </tr>
+                <tr class="r11">
+                    <td>
+                        中分類:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${middleClassification}" readonly />
+                    </td>
+                </tr>
+                <tr class="r12">
+                    <td>
+                        値段:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${price}" readonly />
+                    </td>
+                </tr>
+                <tr class="r13">
+                    <td>
+                        送料:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${expenses}" readonly />
+                    </td>
+                </tr>
+                <tr class="r14">
+                    <td>
+                        説明:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${description}" readonly />
+                    </td>
+                </tr>
+                <tr class="r15">
+                    <td>
+                        キャンペーン:
+                    </td>
+                    <td>
+                        <input name="discount">
+                            <option th:each="gd:${discuonts}" th:value="${gd.discountId}" th:text="${gd.discountvalue}"
+                                    th:selected="${gd.discountId==goods.discount}"
+                            ></option>
+                        </input>
+                    </td>
+                </tr>
+                <tr class="r16">
+                    <td>
+                        産地:
+                    </td>
+                    <td>
+                        <input type="text" class="inputgri" th:value="${producer}" readonly />
+                    </td>
+                </tr>
+            </table>
+            <button class="button2" type="submit" >注文</button>
+        </form>
+        <button class="button" onclick="refresh()">戻る</button>
+    </div>
+</div>
+<div id="footer">
+    Namiki@163.com
+</div>
+</div>
+</body>
+<script>
+    function refresh(){
+        location.href='[[@{/goods/orderlist}]]';
+    }
+
+</script>
+</html>

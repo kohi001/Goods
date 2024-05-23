@@ -9,6 +9,7 @@
         <result property="address" column="address" />
         <result property="sex" column="sex" />
         <result property="department_name" column="department_name" />
+        <result property="mail" column="mail_address"/>
     </resultMap>
     <select id="lists" resultType="Employee">
         select * from `employee`
@@ -53,7 +54,7 @@
         </where>
     </select>
     <select id="getEmployeeWithDepartments" resultMap="employeeDepartmentResultMap">
-        select e.emplyee_id,e.employee_name,e.address,e.sex,d.department as department_name
+        select e.emplyee_id,e.employee_name,e.address,e.sex,e.mail_address,d.department as department_name
         from employee e
         left join department d on e.department = d.id
     </select>
